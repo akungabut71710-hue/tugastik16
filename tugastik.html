@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OhUniq - Custom Merchandise Brand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6B21A8;
+            --secondary: #F9A8D4;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link.active {
+            border-bottom: 2px solid var(--primary);
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .discount-badge {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cart-item {
+            transition: all 0.3s ease;
+        }
+        
+        .cart-item:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-purple-800">OhUniq</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="nav-link active" onclick="changePage('home')">Home</a>
+                    <a href="#" class="nav-link hover:text-purple-800" onclick="changePage('products')">Products</a>
+                    <a href="#" class="nav-link hover:text-purple-800" onclick="changePage('cart')">
+                        <div class="relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center" id="cart-count">0</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button class="outline-none mobile-menu-button">
+                        <svg class="w-6 h-6 text-gray-500" x-show="!showMenu" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                            <path d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div class="hidden mobile-menu bg-white border-t">
+            <div class="flex flex-col px-4 py-3 space-y-2">
+                <a href="#" class="block px-2 py-1 font-medium nav-link active" onclick="changePage('home')">Home</a>
+                <a href="#" class="block px-2 py-1 font-medium nav-link" onclick="changePage('products')">Products</a>
+                <a href="#" class="block px-2 py-1 font-medium nav-link flex items-center" onclick="changePage('cart')">
+                    Cart
+                    <span class="ml-auto bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center" id="mobile-cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="page active" id="home">
+        <section class="relative bg-gradient-to-r from-purple-100 to-pink-100 py-20">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-10 md:mb-0">
+                        <h1 class="text-4xl md:text-5xl font-bold text-purple-900 mb-4">Unique Custom Merchandise</h1>
+                        <p class="text-lg text-gray-700 mb-6">Personalize your lifestyle with our premium custom products - From tumblers to specialty sportswear</p>
+                        <div class="flex space-x-4">
+                            <button class="bg-purple-800 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition duration-300" onclick="changePage('products')">Explore Products</button>
+                            <button class="border border-purple-800 text-purple-800 px-6 py-3 rounded-lg font-medium hover:bg-purple-50 transition duration-300">Our Story</button>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center">
+                        <img src="https://placehold.co/600x400" alt="Stylish collage of OhUniq products including custom tumbler with floral design, personalized sneakers with unique patterns, and embroidered caps" class="rounded-lg shadow-xl">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flash Sale Banner -->
+        <div class="bg-yellow-100 py-3 px-4">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center mb-2 md:mb-0">
+                    <div class="bg-red-500 text-white px-3 py-1 rounded-full mr-3 font-bold discount-badge">
+                        Flash Sale
+                    </div>
+                    <p class="text-gray-800 font-medium">First-time buyers get 20% OFF with code: <span class="font-bold text-purple-800">OHUNIQ20</span></p>
+                </div>
+                <div class="text-gray-500 text-sm">
+                    Offer ends in <span class="font-bold">23:59:59</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Products -->
+        <section class="py-12 px-4">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-purple-900 mb-12">Featured Collections</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Product 1 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden product-card transition duration-300">
+                        <div class="relative">
+                            <img src="https://placehold.co/600x400" alt="Premium heat-resistant tumbler with custom engraving in matte finish available in 5 colors" class="w-full h-64 object-cover">
+                            <div class="absolute top-2 right-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                -20%
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-lg mb-1">Custom Engraved Tumbler</h3>
+                            <div class="flex items-center mb-2">
+                                <div class="flex text-yellow-500">
+                                    ★★★★★
+                                </div>
+                                <span class="text-gray-500 text-sm ml-1">(84)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-purple-800 font-bold text-lg">Rp 299,000</span>
+                                <span class="text-gray-500 text-sm line-through ml-2">Rp 375,000</span>
+                            </div>
+                            <button class="mt-4 w-full bg-purple-100 hover:bg-purple-200 text-purple-800 py-2 rounded-lg font-medium transition duration-300" onclick="addToCart('Custom Engraved Tumbler', 299000, 'https://placehold.co/600x400')">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 2 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden product-card transition duration-300">
+                        <div class="relative">
+                            <img src="https://placehold.co/600x400" alt="High-performance futsal shoes with custom color combinations and embroidered names" class="w-full h-64 object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-lg mb-1">Custom Futsal Shoes</h3>
+                            <div class="flex items-center mb-2">
+                                <div class="flex text-yellow-500">
+                                    ★★★★☆
+                                </div>
+                                <span class="text-gray-500 text-sm ml-1">(56)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-purple-800 font-bold text-lg">Rp 849,000</span>
+                            </div>
+                            <button class="mt-4 w-full bg-purple-100 hover:bg-purple-200 text-purple-800 py-2 rounded-lg font-medium transition duration-300" onclick="addToCart('Custom Futsal Shoes', 849000, 'https://placehold.co/600x400')">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 3 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden product-card transition duration-300">
+                        <div class="relative">
+                            <img src="https://placehold.co/600x400" alt="Personalized leather wallet with monogram embroidery and RFID blocking technology" class="w-full h-64 object-cover">
+                            <div class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                Best Seller
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-lg mb-1">Personalized Leather Wallet</h3>
+                            <div class="flex items-center mb-2">
+                                <div class="flex text-yellow-500">
+                                    ★★★★★
+                                </div>
+                                <span class="text-gray-500 text-sm ml-1">(127)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-purple-800 font-bold text-lg">Rp 425,000</span>
+                            </div>
+                            <button class="mt-4 w-full bg-purple-100 hover:bg-purple-200 text-purple-800 py-2 rounded-lg font-medium transition duration-300" onclick="addToCart('Personalized Leather Wallet', 425000, 'https://placehold.co/600x400')">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-10">
+                    <button class="border-2 border-purple-800 text-purple-800 px-6 py-2 rounded-lg font-medium hover:bg-purple-800 hover:text-white transition duration-300" onclick="changePage('products')">
+                        View All Products
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="py-12 bg-purple-50">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center text-purple-900 mb-12">What Our Customers Say</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Testimonial 1 -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center mb-4">
+                            <img src="https://placehold.co/60x60" alt="Portrait of Sarah J., satisfied customer from Jakarta" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h4 class="font-bold">Sarah J.</h4>
+                                <div class="flex text-yellow-500">
+                                    ★★★★★
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700">"The custom tumbler exceeded my expectations! The engraving is precise and the quality is outstanding. My coworkers keep asking where I got it from."</p>
+                    </div>
+                    
+                    <!-- Testimonial 2 -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center mb-4">
+                            <img src="https://placehold.co/60x60" alt="Portrait of Rizal A., futsal enthusiast from Bandung" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h4 class="font-bold">Rizal A.</h4>
+                                <div class="flex text-yellow-500">
+                                    ★★★★☆
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700">"Ordered custom futsal shoes for my team. The color combinations were exactly what we wanted and they perform great on the court."</p>
+                    </div>
+                    
+                    <!-- Testimonial 3 -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center mb-4">
+                            <img src="https://placehold.co/60x60" alt="Portrait of Dian P., returning customer from Surabaya" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h4 class="font-bold">Dian P.</h4>
+                                <div class="flex text-yellow-500">
+                                    ★★★★★
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700">"I've purchased multiple items from OhUniq. Their attention to detail and quality is consistent. The personalized wallet makes a perfect gift!"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter -->
+        <section class="py-12 px-4">
+            <div class="max-w-3xl mx-auto bg-purple-800 rounded-xl p-8 text-center">
+                <h2 class="text-2xl font-bold text-white mb-4">Stay Updated</h2>
+                <p class="text-purple-100 mb-6">Subscribe to get exclusive offers and early access to new collections</p>
+                <div class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+                    <input type="email" placeholder="Your email address" class="px-4 py-3 rounded-lg flex-grow focus:outline-none">
+                    <button class="bg-yellow-400 hover:bg-yellow-500 text-purple-900 font-bold px-6 py-3 rounded-lg transition duration-300">
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Products Page -->
+    <div class="page" id="products">
+        <section class="py-8 px-4">
+            <div class="max-w-6xl mx-auto">
+                <h1 class="text-3xl font-bold text-purple-900 mb-6">Our Products</h1>
+                
+                <div class="flex flex-col md:flex-row gap-6 mb-8">
+                    <div class="md:w-1/4 bg-white p-4 rounded-lg shadow">
+                        <h3 class="font-bold text-lg mb-4">Categories</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-purple-800 font-medium">All Products</a></li>
+                            <li><a href="#" class="hover:text-purple-800">Tumblers & Drinkware</a></li>
+                            <li><a href="#" class="hover:text-purple-800">Sportswear</a></li>
+                            <li><a href="#" class="hover:text-purple-800">Fashion Accessories</a></li>
+                            <li><a href="#" class="hover:text-purple-800">Tech Accessories</a></li>
+                            <li><a href="#" class="hover:text-purple-800">Gift Sets</a></li>
+                        </ul>
+                        
+                        <h3 class="font-bold text-lg mt-6 mb-4">Price Range</h3>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-gray-600">Rp 0</span>
+                            <span class="text-sm text-gray-600">Rp 2,000,000</span>
+                        </div>
+                        <input type="range" min="0" max="2000000" step="50000" class="w-full accent-purple-800">
+                        
+                        <button class="mt-6 w-full bg-purple-100 hover:bg-purple-200 text-purple-800 py-2 rounded-lg font-medium transition duration-300">
+                            Apply Filters
+                        </button>
+                    </div>
+                    
+                    <div class="md:w-3/4">
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="text-gray-600">Showing <span class="font-bold">12</span> of <span class="font-bold">36</span> products</div>
+                            <div class="flex items-center">
+                                <span class="mr-2 text-gray-600">Sort by:</span>
+                                <select class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-200">
+                                    <option>Featured</option>
+                                    <option>Price: Low to High</option>
+                                    <option>Price: High to Low</option>
+                                    <option>Customer Ratings</option>
+                                    <option>Newest Arrivals</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Product 1 -->
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden product-card transition duration-300">
+                                <div class="relative">
+                                    <img src="https://placehold.co/600x400" alt="Custom insulated tumbler with geometric designs available in matte black, white and blush pink" class="w-full h-64 object-cover">
+                                    <div class="absolute top-2 right-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                        -20%
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-bold text-lg mb-1">Premium Insulated Tumbler</h3>
+                                    <div class="flex items-center mb-2">
+                                        <div class="flex text-yellow-500">
+                                            ★★★★★
+                                        </div>
+                                        <span class="text-gray-500 text-sm ml-1">(142)</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-purple-800 font-bold text-lg">Rp 349,000</span>
+                                        <span class="text-gray-500 text-sm line-through ml-2">Rp 435,000</span>
+                                    </div>
+                                    <button class="mt-4 w-full bg-purple-100 hover:bg-purple-200 text-purple-800 py-2 rounded-lg font-medium transition duration-300" onclick="addToCart('Premium Insulated Tumbler', 349000, 'https://placehold.co/600x400')">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Product 2 -->
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden product-card transition duration-300">
+                                <div class="relative">
+                                    <img src="https://placehold.co/600x400" alt="High-end futsal shoes with breathable mesh and customizable color blocking" class="w-full h-64 object-cover">
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-bold text-lg mb-1">Pro Futsal Shoes</h3>
+                                    <div class="flex items-center mb-2">
+                                        <div class="flex text-yellow-500">
+                                            ★★★★☆
+                                        </div>
+                                        <span class="text-gray-500 text-sm ml-1">(78)</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-purple-800 font-bold text-lg">Rp 899,000</span>
+                                    </div>
+                                    <button class="mt-4 w-full bg-purple-100 hover:bg-purple-200 text-purple-800 py-2 rounded-lg font-medium transition duration-300" onclick="addToCart('Pro Futsal Shoes', 899000, 'https://placehold.co/600x400')">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Product 3 -->
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden product-card transition duration-300">
+                                <div class="relative">
+                                    <img src="https://placehold.co/600x400" alt="Personalized leather wallet with RFID blocking and custom monogram embroidery" class="w-full h-64 object-cover">
+                                    <div class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                        Best Seller
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-bold text-lg mb-1">RFID Blocking Wallet</h3>
+                                    <div class="flex items-center mb-2">
+                                        <div class="flex text-yellow-500">
+                                            ★★★★★
+                                        </div>
+                                        <span class="text-gray-500 text-sm ml-1">(204)</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-purple-800 font-bold text-lg">Rp 425,000</span>
+                                    </div>
+                                    <button class="mt-4 w-full bg-purple-100 hover:bg-purple-200 text-purple-800 py-2 rounded-lg font-medium transition duration-300" onclick="addToCart('RFID Blocking Wallet', 425000, 'https://placehold.co/600x400')">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Product 4 -->
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden product-card transition duration-300">
+                                <div class="relative">
+                                    <img src="https://placehold.co/600x400" alt="Customized drawstring backpack with printed designs perfect for gym or travel" class="w-full h-64 object-cover">
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-bold text-lg mb-1">Printed Drawstring Bag</h3>
+                                    <div class="flex items-center mb-2">
+                                        <div class="flex text-yellow-500">
+                                            ★★★★☆
+                                        </div>
+                                        <span class="text-gray-500 text-sm ml-1">(36)</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-purple-800 font-bold text-lg">Rp 175,000</span>
+                                    </div>
+                                    <button class="mt-4 w-full bg-purple-100 hover:bg-purple-200 text-purple-800 py-2 rounded-lg font-medium transition duration-300" onclick="addToCart('Printed Drawstring Bag', 175000, 'https://placehold.co/600x400')">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Product 5 -->
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden product-card transition duration-300">
+                                <div class="relative">
+                                    <img src="https://placehold.co/600x400" alt="Personalized baseball cap with embroidered designs and adjustable strap" class="w-full h-64 object-cover">
+                                    <div class="absolute top-2 right-2 bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                        New
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-bold text-lg mb-1">Embroidered Baseball Cap</h3>
+                                    <div class="flex items-center mb-2">
+                                        <div class="flex text-yellow-500">
+                                            ★★★★☆
+                                        </div>
+                                        <span class="text-gray-500 text-sm ml-1">(29)</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-purple-800 font-bold text-lg">Rp 249,000</span>
+                                    </div>
+                                    <button class="mt-4 w-full bg-purple-100 hover:bg-purple-200 text-purple-800 py-2 rounded-lg font-medium transition duration-300" onclick="addToCart('Embroidered Baseball Cap', 249000, 'https://placehold.co/600x400')">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Product 6 -->
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden product-card transition duration-300">
+                                <div class="relative">
+                                    <img src="https://placehold.co/600x400" alt="Set of 4 personalized ceramic mugs with full-wrap printing" class="w-full h-64 object-cover">
+                                    <div class="absolute top-2 right-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                        -15%
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-bold text-lg mb-1">Ceramic Mug Set (4)</h3>
+                                    <div class="flex items-center mb-2">
+                                        <div class="flex text-yellow-500">
+                                            ★★★★★
+                                        </div>
+                                        <span class="text-gray-500 text-sm ml-1">(87)</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-purple-800 font-bold text-lg">Rp 525,000</span>
+                                        <span class="text-gray-500 text-sm line-through ml-2">Rp 620,000</span>
+                                    </div>
+                                    <button class="mt-4 w-full bg-purple-100 hover:bg-purple-200 text-purple-800 py-2 rounded-lg font-medium transition duration-300" onclick="addToCart('Ceramic Mug Set (4)', 525000, 'https://placehold.co/600x400')">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-center mt-10">
+                            <nav class="flex items-center space-x-2">
+                                <a href="#" class="px-3 py-1 rounded bg-purple-800 text-white font-medium">1</a>
+                                <a href="#" class="px-3 py-1 rounded hover:bg-purple-100">2</a>
+                                <a href="#" class="px-3 py-1 rounded hover:bg-purple-100">3</a>
+                                <a href="#" class="px-3 py-1 rounded hover:bg-purple-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Cart Page -->
+    <div class="page" id="cart">
+        <section class="py-8 px-4">
+            <div class="max-w-6xl mx-auto">
+                <h1 class="text-3xl font-bold text-purple-900 mb-8">Your Shopping Cart</h1>
+                
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-2/3">
+                        <div class="bg-white rounded-lg shadow overflow-hidden">
+                            <div class="hidden md:grid grid-cols-12 bg-purple-50 text-purple-800 font-bold p-4 border-b">
+                                <div class="col-span-5">Product</div>
+                                <div class="col-span-2 text-center">Price</div>
+                                <div class="col-span-2 text-center">Quantity</div>
+                                <div class="col-span-2 text-center">Total</div>
+                                <div class="col-span-1"></div>
+                            </div>
+                            
+                            <div id="cart-items-container">
+                                <!-- Cart items will be dynamically inserted here -->
+                                <div class="text-center py-12 text-gray-500" id="empty-cart-message">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-purple-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    <h3 class="text-xl font-medium mb-2">Your cart is empty</h3>
+                                    <p class="mb-4">Browse our products to find something you like</p>
+                                    <button class="bg-purple-100 hover:bg-purple-200 text-purple-800 font-medium py-2 px-6 rounded-lg" onclick="changePage('products')">
+                                        Continue Shopping
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="lg:w-1/3">
+                        <div class="bg-white rounded-lg shadow p-6 sticky top-28">
+                            <h2 class="text-xl font-bold text-purple-900 mb-4">Order Summary</h2>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Subtotal</span>
+                                    <span class="font-medium" id="subtotal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Shipping Fee</span>
+                                    <span class="font-medium" id="shipping-fee">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Discount</span>
+                                    <span class="font-medium text-green-600" id="discount">-Rp 0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t pt-4 mb-6">
+                                <div class="flex justify-between text-lg font-bold">
+                                    <span>Total</span>
+                                    <span id="total">Rp 0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="first-order-checkbox" class="rounded border-gray-300 text-purple-800 shadow-sm focus:border-purple-800 focus:ring focus:ring-purple-600 focus:ring-opacity-50">
+                                    <label for="first-order-checkbox" class="ml-2 text-sm text-gray-700">First order? Get 20% off!</label>
+                                </div>
+                            </div>
+                            
+                            <button class="w-full bg-purple-800 hover:bg-purple-700 text-white py-3 rounded-lg font-bold transition duration-300" onclick="checkout()">
+                                Proceed to Checkout
+                            </button>
+                            
+                            <div class="mt-4 text-center text-sm text-gray-500">
+                                You won't be charged until the next step
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-purple-900 text-white py-12 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">OhUniq</h3>
+                    <p class="text-purple-200 mb-4">Your destination for premium custom merchandise and personalized gifts.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-purple-200 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-purple-200 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-purple-200 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Shop</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-purple-200 hover:text-white">All Products</a></li>
+                        <li><a href="#" class="text-purple-200 hover:text-white">Custom Tumbler</a></li>
+                        <li><a href="#" class="text-purple-200 hover:text-white">Futsal Shoes</a></li>
+                        <li><a href="#" class="text-purple-200 hover:text-white">Leather Goods</a></li>
+                        <li><a href="#" class="text-purple-200 hover:text-white">Special Offers</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Help</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-purple-200 hover:text-white">FAQ</a></li>
+                        <li><a href="#" class="text-purple-200 hover:text-white">Shipping & Returns</a></li>
+                        <li><a href="#" class="text-purple-200 hover:text-white">Order Tracking</a></li>
+                        <li><a href="#" class="text-purple-200 hover:text-white">Contact Us</a></li>
+                        <li><a href="#" class="text-purple-200 hover:text-white">Size Guide</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <address class="not-italic text-purple-200 space-y-2">
+                        <div>Jl. Merdeka No. 123</div>
+                        <div>Jakarta, Indonesia 10110</div>
+                        <div>Phone: +62 21 1234 5678</div>
+                        <div>Email: hello@ohuniq.com</div>
+                    </address>
+                </div>
+            </div>
+            
+            <div class="border-t border-purple-800 mt-8 pt-8 text-center text-purple-200">
+                <p>&copy; 2023 OhUniq. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Page navigation
+        function changePage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Find and activate the corresponding nav link
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                if (link.getAttribute('onclick')?.includes(pageId)) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Cart functionality
+        let cart = [];
+        
+        function addToCart(name, price, image) {
+            // Check if item already exists in cart
+            const existingItemIndex = cart.findIndex(item => item.name === name);
+            
+            if (existingItemIndex >= 0) {
+                // Item exists, increase quantity
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                // Add new item to cart
+                cart.push({
+                    name: name,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            showAddedToCartNotification(name);
+        }
+        
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+        
+        function updateQuantity(index, newQuantity) {
+            if (newQuantity > 0) {
+                cart[index].quantity = newQuantity;
+            } else {
+                removeFromCart(index);
+            }
+            updateCart();
+        }
+        
+        function updateCart() {
+            // Save cart to local storage
+            localStorage.setItem('ohuniq-cart', JSON.stringify(cart));
+            
+            // Update cart count
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = cartCount;
+            document.getElementById('mobile-cart-count').textContent = cartCount;
+            
+            // Update cart items display
+            const cartItemsContainer = document.getElementById('cart-items-container');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            
+            if (cart.length > 0) {
+                emptyCartMessage.style.display = 'none';
+                
+                let cartItemsHTML = '';
+                
+                cart.forEach((item, index) => {
+                    cartItemsHTML += `
+                        <div class="cart-item p-4 border-b flex flex-col md:flex-row md:items-center">
+                            <div class="flex items-center mb-4 md:mb-0 md:w-5/12">
+                                <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded mr-4">
+                                <div>
+                                    <h3 class="font-medium">${item.name}</h3>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between md:justify-center md:w-2/12 mb-4 md:mb-0">
+                                <span class="font-medium md:text-center">Rp ${item.price.toLocaleString()}</span>
+                            </div>
+                            <div class="flex items-center justify-between md:justify-center md:w-2/12 mb-4 md:mb-0">
+                                <div class="flex items-center border rounded-lg overflow-hidden">
+                                    <button class="px-3 py-1 bg-gray-100 hover:bg-gray-200" onclick="updateQuantity(${index}, ${item.quantity - 1})">-</button>
+                                    <span class="px-3 py-1">${item.quantity}</span>
+                                    <button class="px-3 py-1 bg-gray-100 hover:bg-gray-200" onclick="updateQuantity(${index}, ${item.quantity + 1})">+</button>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between md:justify-center md:w-2/12 md:text-center">
+                                <span class="font-medium">Rp ${(item.price * item.quantity).toLocaleString()}</span>
+                            </div>
+                            <div class="flex items-center justify-end md:w-1/12">
+                                <button class="text-gray-500 hover:text-red-500" onclick="removeFromCart(${index})">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                cartItemsContainer.innerHTML = cartItemsHTML;
+            } else {
+                emptyCartMessage.style.display = 'block';
+            }
+            
+            // Calculate totals
+            calculateTotals();
+        }
+        
+        function calculateTotals() {
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const shippingFee = cart.length > 0 ? 25000 : 0;
+            
+            let discount = 0;
+            const firstOrderChecked = document.getElementById('first-order-checkbox').checked;
+            if (firstOrderChecked && cart.length > 0) {
+                discount = subtotal * 0.2; // 20% discount
+            }
+            
+            const total = subtotal + shippingFee - discount;
+            
+            document.getElementById('subtotal').textContent = `Rp ${subtotal.toLocaleString()}`;
+            document.getElementById('shipping-fee').textContent = `Rp ${shippingFee.toLocaleString()}`;
+            document.getElementById('discount').textContent = `-Rp ${discount.toLocaleString()}`;
+            document.getElementById('total').textContent = `Rp ${total.toLocaleString()}`;
+        }
+        
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty. Please add items before checkout.');
+                return;
+            }
+            
+            const total = cart.reduce((total, item) => total + (item.price * item.quantity), 0) + 25000;
+            const discount = document.getElementById('first-order-checkbox').checked ? total * 0.2 : 0;
+            const finalTotal = total - discount;
+            
+            alert(`Checkout initiated!\n\nSubtotal: Rp ${total.toLocaleString()}\nDiscount: -Rp ${discount.toLocaleString()}\nShipping: Rp 25,000\nTotal: Rp ${finalTotal.toLocaleString()}\n\nThank you for shopping with OhUniq!`);
+            
+            // Clear cart
+            cart = [];
+            updateCart();
+            document.getElementById('first-order-checkbox').checked = false;
+        }
+        
+        function showAddedToCartNotification(productName) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center animate-slideIn';
+            notification.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Added ${productName} to cart!
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove('animate-slideIn');
+                notification.classList.add('animate-fadeOut');
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 3000);
+        }
+        
+        // Load cart from local storage when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedCart = localStorage.getItem('ohuniq-cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCart();
+            }
+            
+            // Add event listener for first order checkbox
+            document.getElementById('first-order-checkbox').addEventListener('change', calculateTotals);
+        });
+    </script>
+</body>
+</html>
